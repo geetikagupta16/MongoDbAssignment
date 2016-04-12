@@ -1,0 +1,75 @@
+
+Assignment 2
+
+
+1. Insert document in students collection with name "Knoldus Noida" and scores are 
+		
+                  [{"type" : "exam",
+			"score" : 1.4
+		 },{
+			"type" : "quiz",
+			"score" : 11.7
+		},{
+			"type" : "homework",
+			"score" : 6.67
+		},{
+			"type" : "assignment",
+			"score" : 35.87
+		}]
+
+ db.student.insert({"_id": 201, "name": "Knoldus Noida", "scores": [{"type": "exam", "score": 1.4}, {"type": "quiz", "score":11.7}, {"type": "homework", "score": 6.67}, {"type": "assignment", "score": 35.87}]}); 
+WriteResult({ "nInserted" : 1 })
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+2. Find document/documents of person having name "Giselan Levin"
+
+Ans. db.student.find({"name": "Gisela Levin"});
+{ "_id" : 19, "name" : "Gisela Levin", "scores" : [ { "type" : "exam", "score" : 44.51211101958831 }, { "type" : "quiz", "score" : 0.6578497966368002 }, { "type" : "homework", "score" : 93.36341655949683 }, { "type" : "homework", "score" : 49.43132782777443 } ] }
+{ "_id" : 133, "name" : "Gisela Levin", "scores" : [ { "type" : "exam", "score" : 15.88727528055548 }, { "type" : "quiz", "score" : 91.49884857295594 }, { "type" : "homework", "score" : 16.56032169309347 }, { "type" : "homework", "score" : 1.704262924559419 } ] }
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+3. Find document/documents of person having name "Giselan Levin" and display (project) only scores list.
+
+db.student.find({"name": "Gisela Levin"},{"scores": 1});
+{ "_id" : 19, "scores" : [ { "type" : "exam", "score" : 44.51211101958831 }, { "type" : "quiz", "score" : 0.6578497966368002 }, { "type" : "homework", "score" : 93.36341655949683 }, { "type" : "homework", "score" : 49.43132782777443 } ] }
+{ "_id" : 133, "scores" : [ { "type" : "exam", "score" : 15.88727528055548 }, { "type" : "quiz", "score" : 91.49884857295594 }, { "type" : "homework", "score" : 16.56032169309347 }, { "type" : "homework", "score" : 1.704262924559419 } ] }
+> 
+-------------------------------------------------------------------------------------------------------------------------------------
+
+4. Change name of person "Knoldus Noida" to "Noida Knoldus" 
+
+db.student.update({"name": "Knoldus Noida"}, {$set:{"name": "Noida Knoldus"}});
+WriteResult({ "nMatched" : 1, "nUpserted" : 0, "nModified" : 1 })
+
+-------------------------------------------------------------------------------------------------------------------------------------
+
+5. Add new score {type: "assignment", score: 60} to all documents belonging to person having name "Giselan Levin".
+   hint: This is bulk or multi document update.
+
+ db.student.update({"name": "Gisela Levin"}, {$push:{"scores": {"type": "assignment", "score": 60}}},{ multi: true});
+WriteResult({ "nMatched" : 2, "nUpserted" : 0, "nModified" : 2 })
+
+> db.student.find({"name":"Gisela Levin"},{"scores":1});
+{ "_id" : 19, "scores" : [ { "type" : "exam", "score" : 44.51211101958831 }, { "type" : "quiz", "score" : 0.6578497966368002 }, { "type" : "homework", "score" : 93.36341655949683 }, { "type" : "homework", "score" : 49.43132782777443 }, { "type" : "assignment", "score" : 60 } ] }
+{ "_id" : 133, "scores" : [ { "type" : "exam", "score" : 15.88727528055548 }, { "type" : "quiz", "score" : 91.49884857295594 }, { "type" : "homework", "score" : 16.56032169309347 }, { "type" : "homework", "score" : 1.704262924559419 }, { "type" : "assignment", "score" : 60 } ] }
+> 
+-------------------------------------------------------------------------------------------------------------------------------------
+
+6. Find document with score of type assignment.
+
+db.student.find({"scores.type": "assignment"}, {"name" :1});
+{ "_id" : 201, "name" : "Noida Knoldus" }
+{ "_id" : 19, "name" : "Gisela Levin" }
+{ "_id" : 133, "name" : "Gisela Levin" }
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+7. Remove document of person haven name "Noida Knoldus"
+
+db.student.remove({"name": "Noida Knoldus"});
+WriteResult({ "nRemoved" : 1 })
+
+> 
+
